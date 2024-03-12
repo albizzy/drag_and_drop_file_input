@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import PlaceholderImage from '../../../assets/images/placeholder.webp'
 import { AiOutlineCloudUpload } from "react-icons/ai";
 
 const DragDropFileUploader = ({ onFileAccepted }) => {
   const [dragging, setDragging] = useState(false);
   const [imagePreview, setImagePreview] = useState("");
+  const fileInputRef = useRef();
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -38,6 +39,10 @@ const DragDropFileUploader = ({ onFileAccepted }) => {
     }
   };
 
+  const handleClickUpload = () => {
+    fileInputRef.current.click();
+  }
+
   return (
     <div className="w-full h-full">
       <div
@@ -50,13 +55,14 @@ const DragDropFileUploader = ({ onFileAccepted }) => {
         {!imagePreview && <img src={ PlaceholderImage } alt='placeholder' className="w-full absolute top-0 z-0 h-full object-cover object-center" />} {/* shows placeholder when no image is placed */}
         {imagePreview && <img src={imagePreview} alt="Preview" className="w-full absolute top-0 z-0 h-full object-contain object-center" />}
         <input 
-          type="file" 
+          type="file"
+          ref={fileInputRef} 
           onChange={handleChange} 
           accept="image/*"
           className="hidden"
         />
         <div className={`absolute bottom-0 bg-white w-full flex flex-col justify-center items-center py-4`}
-          onClick={() => document.querySelector('input[type="file"]').click()}
+          onClick={handleClickUpload}
         >
           <AiOutlineCloudUpload />
           <p className={`text-sm font-semibold text-gray-700`}>
